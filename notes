@@ -1,0 +1,57 @@
+{{$name}}=> not eleminate html syntax
+{!!$name!!} => decode html syntax
+
+Blade Conditional Directives
+@if
+@elseif
+@else
+@endif
+------------------------------
+    run command: php artisan serve
+    Basic make controller : php artisan make:controller  <controllername>
+
+    Single Action Controller:
+                php artisan make:controller <ControllerName> --invokable
+
+    Resource Action Controller :
+                php artisan make:controller <controllername> --resource
+
+Table create : php artisan make:migration create_tabulardata_table
+
+database : php artisan migrate
+-----------------------------
+@unless
+@endunless
+
+------
+@isset
+@endisset
+
+blade looping concept
+@for
+@endfor
+
+@while
+@endwhile
+
+<?php ?> => @php @endphp
+
+For Comments: {{--omment goes here--}}
+For including: @include
+For raw PHP: @php @endphp
+
+
+Layout Blade Directives
+@yield directive is used to display the contents of a given
+
+section.
+The @section directive, defines a section of content.
+
+The @extends blade directive to specify which layout the child
+view should "inherit".
+
+Layout Blade Directives
+• To render the complete stack contents, pass the name of the
+@stack to the @stack directive:
+
+@push and @endpush is used to push data into the stack.
