@@ -5,6 +5,7 @@ use App\Http\Controllers\demo;
 use App\Http\Controllers\form;
 use App\Http\Controllers\scontroller;
 use App\Http\Controllers\FromController;
+use App\Http\Controllers\ExcelController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,6 +54,14 @@ use App\Http\Controllers\FromController;
 // Resource Controller
 // Route::get('/form',class_name::class)  //not created just for remind
 
-Route::view('/','tabularForm');
-Route::post('/submit-form',[FromController::class,'submitForm'])->name('submit-form');
+// Route::view('/','tabularForm');
+// Route::post('/submit-form',[FromController::class,'submitForm'])->name('submit-form');
+
+// Route::get('/',function(){
+//     return view('fetchExcelDataInsertDb');
+// });
+
+Route::get('/',[ExcelController::class,'submitExcel']);
+Route::get('/studentview',[ExcelController::class,'view']);
+Route::post('/import-data',[ExcelController::class,'upload']);
 

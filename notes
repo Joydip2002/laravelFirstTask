@@ -19,6 +19,8 @@ Blade Conditional Directives
 Table create : php artisan make:migration create_tabulardata_table
 
 database : php artisan migrate
+
+
 -----------------------------
 @unless
 @endunless

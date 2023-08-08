@@ -13,7 +13,8 @@ class FromController extends Controller
         $options_data = [];
         foreach ($options as $key => $value) {
            
-            // echo "<pre>";print_r ($value['name']);"<br />";
+            // echo "<pre>";
+            // print_r ($value['name']);"<br />";
             // echo $value->name;die;
             $options_data[] = ['name' => $value['name'], 'email' => $value['email'],'mobile' => $value['mobile'],'address' => $value['address']];
         }    
