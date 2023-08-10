@@ -20,6 +20,9 @@ Table create : php artisan make:migration create_tabulardata_table
 
 database : php artisan migrate
 
+php artisan lang:publish
+
+Add Column existing db = php artisan make:migration add_column_to_table_name 
 
 -----------------------------
 @unless

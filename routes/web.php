@@ -64,4 +64,18 @@ use App\Http\Controllers\ExcelController;
 Route::get('/',[ExcelController::class,'submitExcel']);
 Route::get('/studentview',[ExcelController::class,'view']);
 Route::post('/import-data',[ExcelController::class,'upload']);
+Route::get('/sortById/{type}',[ExcelController::class,'sortById'])->name('sortById');
+Route::get('/sortByName/{type}',[ExcelController::class,'sortByName'])->name('sortByName');
+Route::get('/sortByEmail/{type}',[ExcelController::class,'sortByEmail'])->name('sortByEmail');
+Route::get('/sortByAddress/{type}',[ExcelController::class,'sortByAddress'])->name('sortByAddress');
+Route::get('/studentview/edit/{id}',[ExcelController::class,'edit'])->name('student-edit');
+Route::patch('/studentview/update/{id}',[ExcelController::class,'update'])->name('student-update');
+Route::view('/studentedit','studentedit');
+Route::get('/studentview/delete/{id}',[ExcelController::class,'delete'])->name('student-delete');
+Route::get('/studentview/active', [ExcelController::class, 'updateStatus'])->name('student-active-status');
+Route::get('/studentview/inactive', [ExcelController::class, 'inactiveupdateStatus'])->name('student-inactive-status');
+Route::get('/studentview/status/{id}',[ExcelController::class,'changeStatusUsingBtn'])->name('change-status');
+
+
+
 
