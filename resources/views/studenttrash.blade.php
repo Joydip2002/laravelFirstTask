@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Student View</title>
+    <title>Student Trashed View</title>
+    
     @include('header')
     <style>
         .hidden {
@@ -16,7 +17,7 @@
 
 <body style="background:#141b2d">
     <div class="container d-flex justify-content-between mt-3 flex-wrap">
-        <span class="fs-2 text-white">Student Data</span>
+        <span class="fs-2 text-white">Student Trushed Data</span>
         <span>
             <form action="/studentview" class="d-flex">
                 <input class="form-control me-2" name="startSearchDate" type="date" placeholder="Start Date"
@@ -38,31 +39,32 @@
             </form>
         </span>
     </div>
-    <div class="container d-flex my-1 justify-content-between">
-        <div>
+    <div class="container d-flex my-1 justify-content-end">
+        {{-- <div>
             <button class="btn btn-success hidden" id="selected_id">Active All Selected</button>&nbsp;
             <button class="btn btn-info" id="bulk_id">Bulk Selected</button>
-            <button class="btn btn-danger hidden mx-1" id="bulk_delete">Bulk Trash</button>
+            <button class="btn btn-danger mx-1" id="bulk_delete">Bulk Delete</button>
             <button class="btn btn-warning mx-1 hidden" id="inactive_selected_id">Inactive Selected All</button>
             <button class="btn btn-danger hidden" id="cancel_bulk">Cancel Bulk</button>
-            <button class="btn btn-danger hidden" id="all_delete_bulk"> Trash All Selected</button>
-            <button class="btn btn-danger hidden mx-1" id="cancel_delete_bulk">Cancel Trash Bulk</button>
-        </div>
+            <button class="btn btn-danger hidden" id="all_delete_bulk"> Delete All Selected</button>
+            <button class="btn btn-danger hidden mx-1" id="cancel_delete_bulk">Cancel Delete Bulk</button>
+        </div> --}}
         <div>
-            <a href="{{ url('studentview/trash') }}"> <button class="btn btn-danger" id="">Go To
-                    Trash</button></a>
+            <a href="{{url('studentview')}}">
+                <button class="btn btn-danger mx-1" id=" ">Go to StudentView</button>
+            </a>
         </div>
     </div>
 
     @if (session()->has('success'))
-        <div class=" container alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="container alert alert-success alert-dismissible">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="container alert alert-warning alert-dismissible fade show" role="alert">
+        @endif
+        
+        @if (session()->has('error'))
+        <div class="container alert alert-erroe alert-dismissible">
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -147,7 +149,7 @@
                     $number = 1;
                 @endphp
                 @foreach ($studentData as $sdata)
-                    <tr class="text-white" id="student_ids{{ $sdata->id }}">
+                    <tr class="text-white" id="student_ids{{$sdata->id}}">
                         <td class="hidden co1"><input type="checkbox" name='id'
                                 class="scheckbox scheckboxtoggle hidden" value="{{ $sdata->id }}"
                                 data-status="{{ $sdata->status }}"></td>
@@ -164,7 +166,7 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <a href="{{ url('/studentview/status') }}/{{ $sdata->id }}">
+                            {{-- <a href="{{ url('/studentview/status') }}/{{ $sdata->id }}">
                                 @if ($sdata->status == 1)
                                     <button class="btn btn-danger m-2">
                                         Inactive
@@ -174,15 +176,15 @@
                                         Active
                                     </button>
                                 @endif
-                            </a>
+                            </a> --}}
 
-                            <a href="{{ url('/studentview/edit') }}/{{ $sdata->id }}"><button
-                                    class="btn btn-success m-2">Update</button>
+                            <a href="{{ url('/studentview/restore') }}/{{ $sdata->id }}"><button
+                                    class="btn btn-success m-2">Restore</button>
                             </a>
                             &nbsp;
-                            <a href="{{ url('/studentview/delete') }}/{{ $sdata->id }}"
+                            <a href="{{ url('/studentview/forcedelete') }}/{{ $sdata->id }}"
                                 onclick="event.preventDefault(); deleteStudent('{{ $sdata->id }}');"><button
-                                    class="btn btn-danger m-2">Trash</button>
+                                    class="btn btn-danger m-2">Delete</button>
                             </a>
                         </td>
                     </tr>
@@ -327,53 +329,42 @@
         $('input:checkbox[name=id]:checked').each(function() {
             // var idStatus = $(this).data('status');
             // if (idStatus == '1') {
-            idsArr3.push($(this).val());
+                idsArr3.push($(this).val());
             // }
             console.log(idsArr3);
         });
 
         if (idsArr3.length > 0) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You not be able to revert this!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Trash!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '{{ route('studentsoft-delete') }}',
-                        type: 'get', // Corrected method here
-                        data: {
-                            idsArr3: idsArr3,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(data, status) {
-                            console.log(data);
-                            $.each(idsArr3, function(key, val) {
-                                $("#student_ids" + val).remove();
-                            })
-                            if (data.status === 200) {
-                                Swal.fire({
-                                    position: 'middle-center',
-                                    icon: 'success',
-                                    text: data.message,
-                                    // confirmButtonText: "OK"
-                                    timer: 2000
-                                }).then(() => {
-                                    window.location.href = "{{ 'studentview' }}";
-                                });
-                            } else {
-                                Swal.fire({
-                                    position: 'middle-center',
-                                    icon: 'error',
-                                    text: "something went wrong!!",
-                                    // confirmButtonText: "OK"
-                                })
-                            }
-                        }
-                    });
+            $.ajax({
+                url: '{{ route('studentsoft-delete') }}',
+                type: 'get', // Corrected method here
+                data: {
+                    idsArr3: idsArr3,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data, status) {
+                    console.log(data);
+                    $.each(idsArr3,function(key,val){
+                        $("#student_ids"+val).remove();
+                    })
+                    if (data.status === 200) {
+                        Swal.fire({
+                            position: 'middle-center',
+                            icon: 'success',
+                            text: data.message,
+                            // confirmButtonText: "OK"
+                            timer: 2000
+                        }).then(() => {
+                            window.location.href = "{{ 'studentview' }}";
+                        });
+                    } else {
+                        Swal.fire({
+                            position: 'middle-center',
+                            icon: 'error',
+                            text: "something went wrong!!",
+                            // confirmButtonText: "OK"
+                        })
+                    }
                 }
             });
         } else {
@@ -395,7 +386,7 @@
         $(".scheckboxtoggle").show();
         $('.co1').show();
         $('.co2').hide();
-        $("#bulk_delete").show();
+        $("#bulk_delete").hide();
         $('#cancel_delete_bulk').hide();
         $('#all_delete_bulk').hide();
     })
@@ -409,10 +400,10 @@
         $('.co1').hide();
         $('.co2').show();
         $('#cancel_delete_bulk').hide();
-        $("#bulk_delete").hide();
+        $("#bulk_delete").show();
         $("#all_delete_bulk").hide();
     })
-    $("#bulk_delete").click(function() {
+    $("#bulk_delete").click(function(){
         $("#bulk_id").hide();
         $("#selected_id").hide();
         $("#cancel_bulk").hide();
@@ -424,14 +415,14 @@
         $('#cancel_delete_bulk').show();
         $('#all_delete_bulk').show();
     })
-    $('#cancel_delete_bulk').click(function() {
-        $("#bulk_id").hide();
-        $("#selected_id").show();
-        $("#cancel_bulk").show();
-        $("#inactive_selected_id").show();
-        $(".scheckboxtoggle").show();
-        $('.co1').show();
-        $('.co2').hide();
+    $('#cancel_delete_bulk').click(function(){
+        $("#bulk_id").show();
+        $("#selected_id").hide();
+        $("#cancel_bulk").hide();
+        $("#inactive_selected_id").hide();
+        $(".scheckboxtoggle").hide();
+        $('.co1').hide();
+        $('.co2').show();
         $("#bulk_delete").show();
         $('#cancel_delete_bulk').hide();
         $('#all_delete_bulk').hide();
@@ -447,10 +438,10 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Trashed it!'
+            confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "{{ route('student-delete', '') }}/" + studentId;
+                window.location.href = "{{ route('student-force-delete', '') }}/" + studentId;
             }
         });
     }

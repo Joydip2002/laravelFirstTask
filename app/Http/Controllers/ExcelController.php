@@ -87,18 +87,49 @@ class ExcelController extends Controller
         return view('studentview', $data);
     }
 
+    public function trash(){
+        $studentData = Student::onlyTrashed()->paginate();
+        $data = compact('studentData');
+        return view('studenttrash')->with($data);
+    }
+
+    public function restore($id){
+        $studentData = Student::withTrashed()->find($id);
+        if (!is_null($studentData)) {
+            $studentData->restore();
+            session()->flash('success', 'restored successfully');
+        } else {
+            session()->flash('error', 'student not found');
+        }
+        return back();
+    }
+
     public function delete($id)
     {
         // echo $id;
         $studentData = Student::find($id);
         if (!is_null($studentData)) {
             $studentData->delete();
-            session()->flash('success', 'Student deleted successfully');
+            session()->flash('success', 'move to trash successfully');
         } else {
-            session()->flash('error', 'Student not found');
+            session()->flash('error', 'student not found');
         }
-        return redirect('studentview');
+        return back();
     }
+
+    public function forcedelete($id){
+
+        $studentData = Student::withTrashed()->find($id);
+        if (!is_null($studentData)) {
+            $studentData->forceDelete();
+            session()->flash('success', 'deleted successfully');
+        } else {
+            session()->flash('error', 'student not found');
+        }
+        return back();
+    }
+
+   
 
     public function edit($id)
     {
@@ -194,6 +225,12 @@ class ExcelController extends Controller
         // dd($idsArr2);
         Student::whereIn('id', $idsArr2)->update(['status' => '0']);
         return response()->json(['message' => 'status inactivated successfully', 'status' => 200]);
+    }
+
+    public function deletebulk(Request $request){
+        $idsArr3 = $request->input('idsArr3');
+        Student::whereIn('id',$idsArr3)->delete();
+        return response()->json(['message' => 'move to trash successfully', 'status' => 200]);
     }
 
 

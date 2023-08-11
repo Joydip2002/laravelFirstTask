@@ -3,7 +3,8 @@
 <!-- Bootstrap Css Link -->
 
 <!-- Favicon Link -->
-<link rel="shortcut icon" href="../../public/logos/dashboard.png" type="image/x-icon">
+<link rel="icon" href="{{asset('favicon.ico') }}" type="image/x-icon">
+
 <link rel="stylesheet" href="../css/index.css" />
 <!-- Favicon Link -->
 
