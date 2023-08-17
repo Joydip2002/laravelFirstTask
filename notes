@@ -17,7 +17,6 @@ Blade Conditional Directives
                 php artisan make:controller <controllername> --resource
 
 Table create : php artisan make:migration create_tabulardata_table
-
 database : php artisan migrate
 
 php artisan lang:publish

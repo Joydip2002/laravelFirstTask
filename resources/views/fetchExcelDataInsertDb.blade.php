@@ -41,7 +41,7 @@
             print_r($errors->all());
         @endphp
         </pre> --}}
-        <div class="fs-5 display-2">Here You Can Upload your excel file and directly insert data into database</div>
+        <div class="fs-5 display-2">Hi &nbsp;<strong>{{session('user_name')}}</strong>&nbsp;Here You Can Upload your excel file and directly insert data into database</div>
         <div class="card">
             <form action="{{ url('import-data') }}" method="POST" enctype="multipart/form-data">
                 @csrf
